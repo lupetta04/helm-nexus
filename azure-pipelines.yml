@@ -51,7 +51,7 @@ stages:
         releaseName: '${{ parameters.releaseName }}'
         install: true
         waitForExecution: true
-        arguments: '--create-namespace --timeout 10m'
+        arguments: '--create-namespace --timeout 10m --atomic --cleanup-on-fail'
     
     - task: Kubernetes@1
       displayName: 'Get deployment status'
