@@ -1,0 +1,15 @@
+apiVersion: v2
+name: nexus
+description: A Helm chart for Sonatype Nexus Repository Manager
+type: application
+version: 1.0.0
+appVersion: "3.65.0"
+keywords:
+  - nexus
+  - repository
+  - artifacts
+home: https://www.sonatype.com/products/nexus-repository
+sources:
+  - https://github.com/lupetta04/helm-nexus
+maintainers:
+  - name: lupetta04

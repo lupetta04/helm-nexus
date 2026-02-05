@@ -1,0 +1,63 @@
+trigger:
+  branches:
+    include:
+      - main
+      - master
+
+parameters:
+  - name: kubernetesServiceConnection
+    displayName: 'Kubernetes Service Connection'
+    type: string
+    default: ''
+  - name: namespace
+    displayName: 'Target Namespace'
+    type: string
+    default: 'default'
+  - name: releaseName
+    displayName: 'Helm Release Name'
+    type: string
+    default: 'nexus'
+  - name: chartPath
+    displayName: 'Helm Chart Path'
+    type: string
+    default: 'nexus-chart'
+
+variables:
+  vmImageName: 'ubuntu-latest'
+
+stages:
+- stage: Deploy
+  displayName: 'Deploy Nexus to AKS'
+  jobs:
+  - job: DeployHelm
+    displayName: 'Deploy Helm Chart'
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - task: HelmInstaller@1
+      displayName: 'Install Helm'
+      inputs:
+        helmVersionToInstall: 'latest'
+    
+    - task: HelmDeploy@0
+      displayName: 'Helm upgrade/install'
+      inputs:
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceConnection: '${{ parameters.kubernetesServiceConnection }}'
+        namespace: '${{ parameters.namespace }}'
+        command: 'upgrade'
+        chartType: 'FilePath'
+        chartPath: '${{ parameters.chartPath }}'
+        releaseName: '${{ parameters.releaseName }}'
+        install: true
+        waitForExecution: true
+        arguments: '--create-namespace --timeout 10m'
+    
+    - task: Kubernetes@1
+      displayName: 'Get deployment status'
+      inputs:
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceConnection: '${{ parameters.kubernetesServiceConnection }}'
+        namespace: '${{ parameters.namespace }}'
+        command: 'get'
+        arguments: 'pods -l app.kubernetes.io/name=nexus'
