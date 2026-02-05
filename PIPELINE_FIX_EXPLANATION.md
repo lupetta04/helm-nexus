@@ -64,9 +64,16 @@ Per evitare ulteriormente questo tipo di errori in futuro:
      batchSize: 1  # Processa un commit alla volta
    ```
 
-2. **Gestione Manuale dei Lock (se necessario)**: Se l'errore persiste, è possibile rimuovere manualmente il lock con:
+2. **Gestione Manuale dei Lock (se necessario)**: Se l'errore persiste nonostante la correzione, è possibile identificare e rimuovere manualmente i lock con:
    ```bash
-   kubectl -n nexus delete secret sh.helm.release.v1.nexus.v[VERSION].lock
+   # Identificare i lock esistenti
+   kubectl -n nexus get secrets | grep ".lock"
+   
+   # Rimuovere il lock specifico (sostituire X con il numero di revisione)
+   kubectl -n nexus delete secret sh.helm.release.v1.nexus.vX.lock
+   
+   # Esempio con revisione 3:
+   # kubectl -n nexus delete secret sh.helm.release.v1.nexus.v3.lock
    ```
 
 3. **Monitoraggio dello Stato**: Verificare lo stato del release prima di ogni deployment:
