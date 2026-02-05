@@ -8,7 +8,7 @@ parameters:
   - name: kubernetesServiceConnection
     displayName: 'Kubernetes Service Connection'
     type: string
-    default: 'aksservicenowsvil-'
+    default: 'aksservicenowsvil'
   - name: namespace
     displayName: 'Target Namespace'
     type: string
