@@ -8,11 +8,11 @@ parameters:
   - name: kubernetesServiceConnection
     displayName: 'Kubernetes Service Connection'
     type: string
-    default: ''
+    default: 'aksservicenowsvil-'
   - name: namespace
     displayName: 'Target Namespace'
     type: string
-    default: 'default'
+    default: 'nexus'
   - name: releaseName
     displayName: 'Helm Release Name'
     type: string
